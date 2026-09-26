@@ -25,7 +25,7 @@ export const CONFIG = {
 
   // --- Movement (§3.1) ---
   movement: {
-    baseSpeed: 70, // px/s along the heading
+    baseSpeed: 100, // px/s along the diagonal (vertical scroll = baseSpeed · cos 60° = 50 px/s)
     maxHeading: 60 * DEG, // target heading is ±this
     turnRate: 360 * DEG, // rad/s
     startHeadingSign: 1 as 1 | -1, // +1 = right

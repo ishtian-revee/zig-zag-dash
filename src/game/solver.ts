@@ -4,6 +4,9 @@ import type { Chunk } from './chunks';
 import { spawnSpecs, updateEntity, type Ent } from './entities';
 import { createPlayer, playerHitRadius, stepPlayer, type PlayerState } from './player';
 
+/** Chunks are entered/exited at least this far from either edge (room to turn away from a wall at top speed). */
+export const ENTRY_LO = 30;
+
 export interface Entry {
   x: number;
   target: 1 | -1;
@@ -44,8 +47,8 @@ export interface SolveResult {
 export function solveChunk(chunk: Chunk, mirror: boolean, entry: Entry, prm: SolveParams): SolveResult {
   const step = 1 / CONFIG.loop.stepHz;
   const every = prm.decisionFrames ?? 4;
-  const lo = prm.exitLo ?? 20;
-  const hi = prm.exitHi ?? CONFIG.view.width - 20;
+  const lo = prm.exitLo ?? ENTRY_LO;
+  const hi = prm.exitHi ?? CONFIG.view.width - ENTRY_LO;
   const budget = prm.budget ?? 400000;
   const margin = CONFIG.gen.positionJitter;
   const r = playerHitRadius();
@@ -129,7 +132,7 @@ export function solveChunk(chunk: Chunk, mirror: boolean, entry: Entry, prm: Sol
 /** Standard entry states used by the solvability test. */
 export function standardEntries(): Entry[] {
   const out: Entry[] = [];
-  for (const x of [20, 55, 90, 125, 160]) for (const target of [1, -1] as const) out.push({ x, target });
+  for (const x of [ENTRY_LO, 60, 90, 120, CONFIG.view.width - ENTRY_LO]) for (const target of [1, -1] as const) out.push({ x, target });
   return out;
 }
 

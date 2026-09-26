@@ -17,7 +17,11 @@ export function flip(p: PlayerState): void {
   p.target = p.target === 1 ? -1 : 1;
 }
 
-/** Advance the player one logic step. Pure apart from mutating `p`. */
+/**
+ * Advance the player one logic step. Pure apart from mutating `p`.
+ * Vertical speed is constant (speed · cos maxHeading) so the camera scroll never surges during a turn;
+ * only the horizontal component follows the heading, reaching speed · sin maxHeading on the diagonal.
+ */
 export function stepPlayer(p: PlayerState, dt: number, speed: number): void {
   const m = CONFIG.movement;
   const goal = p.target * m.maxHeading;
@@ -25,7 +29,7 @@ export function stepPlayer(p: PlayerState, dt: number, speed: number): void {
   const maxTurn = m.turnRate * dt;
   p.heading = Math.abs(d) <= maxTurn ? goal : p.heading + Math.sign(d) * maxTurn;
   p.x += speed * Math.sin(p.heading) * dt;
-  p.y -= speed * Math.cos(p.heading) * dt;
+  p.y -= speed * Math.cos(m.maxHeading) * dt;
 }
 
 export function playerHitRadius(): number {

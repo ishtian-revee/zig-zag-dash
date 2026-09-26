@@ -38,10 +38,21 @@ describe('movement', () => {
     expect(p.x - x).toBeCloseTo(70 * Math.sin(-MAX) * DT, 9);
   });
 
-  it('moves at speed along the heading', () => {
+  it('moves at speed along the diagonal', () => {
     const p = createPlayer(90, 0);
     stepPlayer(p, DT, 70);
     expect(Math.hypot(p.x - 90, p.y)).toBeCloseTo(70 * DT, 9);
+  });
+
+  it('keeps a constant vertical (scroll) speed through a turn', () => {
+    const p = createPlayer(90, 0);
+    const vy = 70 * Math.cos(MAX);
+    flip(p);
+    for (let i = 0; i < 30; i++) {
+      const y = p.y;
+      stepPlayer(p, DT, 70);
+      expect((y - p.y) / DT).toBeCloseTo(vy, 9);
+    }
   });
 
   it('is deterministic', () => {
@@ -66,15 +77,16 @@ describe('sectors', () => {
   });
 
   it('speed grows 6% per sector, capped at the 8th sector', () => {
-    expect(sectorSpeed(0)).toBeCloseTo(70);
-    expect(sectorSpeed(1)).toBeCloseTo(70 * 1.06);
-    expect(sectorSpeed(7)).toBeCloseTo(70 * 1.06 ** 7);
+    const b = CONFIG.movement.baseSpeed;
+    expect(sectorSpeed(0)).toBeCloseTo(b);
+    expect(sectorSpeed(1)).toBeCloseTo(b * 1.06);
+    expect(sectorSpeed(7)).toBeCloseTo(b * 1.06 ** 7);
     expect(sectorSpeed(20)).toBeCloseTo(sectorSpeed(7));
     expect(MAX_SPEED).toBeCloseTo(sectorSpeed(7));
   });
 
   it('sector lengths match 20 s of flight', () => {
-    expect(sectorLength(0)).toBeCloseTo(20 * 70 * 0.5);
+    expect(sectorLength(0)).toBeCloseTo(20 * CONFIG.movement.baseSpeed * 0.5);
     expect(sectorStart(1) - sectorStart(0)).toBeCloseTo(sectorLength(0));
     expect(sectorAt(0)).toBe(-1);
     expect(sectorAt(sectorStart(0))).toBe(0);
