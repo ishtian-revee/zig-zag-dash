@@ -19,7 +19,6 @@ export function chunkWeight(c: Chunk, sector: number): number {
   let w = Math.exp(-(d * d) / 1.5);
   // Favour chunks that introduce the sector's new hazards.
   if (c.minSector === s && s > 0) w *= 2.2;
-  if (c.rare) w *= 0.25;
   return w;
 }
 
@@ -41,8 +40,11 @@ export class Generator {
 
   pick(sector: number): Chunk {
     const safe = this.placed < CONFIG.gen.safeStartChunks;
-    const pool = safe ? this.library.filter((c) => c.safe) : this.library;
-    const weights = pool.map((c) => (c.id === this.lastId ? 0 : safe ? 1 : chunkWeight(c, sector)));
+    const s = Math.max(0, sector);
+    const rares = this.library.filter((c) => c.rare && c.minSector <= s && c.id !== this.lastId);
+    const useRare = !safe && rares.length > 0 && this.rng.chance(CONFIG.gen.rareChance);
+    const pool = safe ? this.library.filter((c) => c.safe) : useRare ? rares : this.library.filter((c) => !c.rare);
+    const weights = pool.map((c) => (c.id === this.lastId ? 0 : safe || useRare ? 1 : chunkWeight(c, sector)));
     if (!weights.some((w) => w > 0)) return pool[0];
     return pool[this.rng.weighted(weights)];
   }

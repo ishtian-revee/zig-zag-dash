@@ -1,0 +1,91 @@
+import { coinCluster, coinLine, coinPath, type Chunk } from './types';
+
+// EPSILON+: harder tiers, tighter spacing, more rockets.
+export const EPSILON_CHUNKS: Chunk[] = [
+  {
+    id: 'e-rocket-barrage',
+    h: 320,
+    tier: 4,
+    minSector: 4,
+    e: [
+      { t: 'rocket', y: 100, side: 'L', slope: 0.25 },
+      { t: 'rocket', y: 180, side: 'R', slope: 0.25 },
+      { t: 'rocket', y: 260, side: 'L', slope: 0.35 },
+      { t: 'asteroid', x: 90, y: 140, r: 3.5 },
+      { t: 'asteroid', x: 90, y: 225, r: 3.5 },
+      ...coinPath([[50, 60], [130, 140], [50, 220], [130, 300]], 3),
+      { t: 'gem', x: 90, y: 300, v: 3 },
+    ],
+  },
+  {
+    id: 'e-gauntlet',
+    h: 300,
+    tier: 4,
+    minSector: 4,
+    e: [
+      { t: 'laser', pts: [[4, 110], [60, 130]] },
+      { t: 'laser', pts: [[110, 130], [176, 110]] },
+      { t: 'rocket', y: 210, side: 'L', slope: 0.3 },
+      { t: 'moon', x: 140, y: 240, r: 7 },
+      ...coinCluster(85, 130),
+      { t: 'gem', x: 50, y: 260, v: 2 },
+    ],
+  },
+  {
+    id: 'e-spinner-gate',
+    h: 300,
+    tier: 5,
+    minSector: 4,
+    e: [
+      { t: 'laser', pts: [[4, 150], [48, 150]] },
+      { t: 'laser', pts: [[132, 150], [176, 150]] },
+      { t: 'spinner', x: 90, y: 150, len: 16, spin: 1.2 },
+      { t: 'gem', x: 90, y: 200, v: 3 },
+      ...coinLine(66, 100, 66, 130, 2),
+      ...coinLine(114, 170, 114, 200, 2),
+    ],
+  },
+  {
+    id: 'e-planet-maze',
+    h: 320,
+    tier: 4,
+    minSector: 4,
+    e: [
+      { t: 'planet', x: 40, y: 80, r: 18, c: 'blue' },
+      { t: 'planet', x: 132, y: 120, r: 20, c: 'violet' },
+      { t: 'planet', x: 50, y: 190, r: 16, c: 'green' },
+      { t: 'planet', x: 140, y: 250, r: 18, c: 'magenta', ring: true },
+      { t: 'moon', x: 95, y: 250, r: 5 },
+      ...coinPath([[90, 60], [90, 150], [100, 210]], 4),
+      { t: 'gem', x: 60, y: 290, v: 2 },
+    ],
+  },
+  {
+    id: 'e-slider-pair',
+    h: 320,
+    tier: 5,
+    minSector: 4,
+    e: [
+      { t: 'slider', pts: [[-20, 110], [70, 110]], dx: 30, period: 3 },
+      { t: 'slider', pts: [[118, 110], [208, 110]], dx: 30, period: 3 },
+      { t: 'slider', pts: [[-20, 230], [70, 230]], dx: 30, period: 3, phase: 0.5 },
+      { t: 'slider', pts: [[118, 230], [208, 230]], dx: 30, period: 3, phase: 0.5 },
+      ...coinLine(94, 90, 94, 250, 7),
+      { t: 'gem', x: 94, y: 170, v: 3 },
+    ],
+  },
+  {
+    id: 'e-moon-rockets',
+    h: 320,
+    tier: 5,
+    minSector: 5,
+    rare: true,
+    e: [
+      { t: 'bigmoon', x: 56, y: 170, r: 30, bob: 6 },
+      { t: 'rocket', y: 110, side: 'R', slope: 0.2 },
+      { t: 'rocket', y: 250, side: 'R', slope: 0.3 },
+      ...coinLine(140, 120, 140, 230, 5),
+      { t: 'gem', x: 130, y: 280, v: 3 },
+    ],
+  },
+];

@@ -51,6 +51,8 @@ export function solveChunk(chunk: Chunk, mirror: boolean, entry: Entry, prm: Sol
   const r = playerHitRadius();
 
   const ents: Ent[] = spawnSpecs(chunk.e, 0, { mirror, seed: 1 });
+  // In a real run these get up to positionJitter of offset: test them with that margin.
+  for (const e of ents) if (e.kind === 'planet' || e.kind === 'moon' || e.kind === 'asteroid') e.jittered = true;
   const rockets = ents.filter((e) => e.kind === 'rocket');
   const rocketStart = rockets.map((e) => ({ x: e.x, y: e.y }));
   const moving = ents.some((e) => e.kind === 'spinner' || e.kind === 'bigmoon' || (e.kind === 'laser' && e.dx !== 0));

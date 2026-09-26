@@ -51,6 +51,25 @@ describe('collision', () => {
     expect(hitsEntity(s, 90, 25, R)).toBe(true);
   });
 
+  it('solvability margin applies only to jittered obstacles', () => {
+    const p = one({ t: 'planet', x: 90, y: 0, r: 20 });
+    const x = 90 + 20 * 0.9 + R + 1; // 1 px clear
+    expect(hitsEntity(p, x, 0, R, 3)).toBe(false);
+    p.jittered = true;
+    expect(hitsEntity(p, x, 0, R, 3)).toBe(true);
+  });
+
+  it('jittered spawns stay within positionJitter and only shrink', () => {
+    let seed = 1;
+    const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let i = 0; i < 200; i++) {
+      const [e] = spawnSpecs([{ t: 'planet', x: 90, y: 50, r: 20 }], 0, { mirror: false, rand, seed: i });
+      expect(Math.hypot(e.x - 90, e.y + 50)).toBeLessThanOrEqual(CONFIG.gen.positionJitter + 1e-9);
+      expect(e.r).toBeLessThanOrEqual(20);
+      expect(e.jittered).toBe(true);
+    }
+  });
+
   it('mirroring flips x', () => {
     const [a] = spawnSpecs([{ t: 'moon', x: 30, y: 10, r: 5 }], 100, { mirror: true, seed: 1 });
     expect(a.x).toBe(CONFIG.view.width - 30);

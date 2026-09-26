@@ -69,7 +69,8 @@ export const CONFIG = {
     /** Distance from the start position to the ALPHA line. */
     firstLineDistance: 110,
     names: ['ALPHA', 'BETA', 'GAMMA', 'DELTA', 'EPSILON', 'ZETA', 'ETA', 'THETA', 'IOTA', 'KAPPA', 'LAMBDA', 'MU'],
-    hueShiftPerSector: 18, // degrees
+    hueShiftPerSector: 12, // degrees per sector…
+    hueShiftMax: 48, // …bouncing back and forth within this range so it stays subtle
     confettiCount: 60,
     /** Wall accent colour per sector (cycles). */
     accents: ['#3dff5a', '#ff2fb3', '#3ff0ff', '#8e3cff', '#ffae1a', '#3aa0ff'],
@@ -78,6 +79,8 @@ export const CONFIG = {
   // --- Generation (§4.2) ---
   gen: {
     safeStartChunks: 2,
+    /** Chance that a chunk slot is filled with a rare chunk (landmarks, power-up nests). */
+    rareChance: 0.12,
     positionJitter: 3,
     sizeJitter: 0.08,
     lookAhead: 480, // keep chunks generated this far above the camera top

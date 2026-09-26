@@ -69,6 +69,7 @@ attachInput(canvas, {
 
 // Auto-pause when the tab is hidden or the window loses focus.
 const autoPause = () => {
+  if (import.meta.env.DEV && (window as unknown as { __noAutoPause?: boolean }).__noAutoPause) return;
   if (app.current === 'play' && !app.run.world.dead) app.go('pause', true);
 };
 document.addEventListener('visibilitychange', () => {

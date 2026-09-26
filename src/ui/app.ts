@@ -111,7 +111,10 @@ export class App {
   }
 
   onSector(i: number): void {
-    this.bg.setHue(i * CONFIG.sectors.hueShiftPerSector);
+    const s = CONFIG.sectors;
+    const steps = Math.round(s.hueShiftMax / s.hueShiftPerSector);
+    const k = i % (steps * 2);
+    this.bg.setHue((k <= steps ? k : steps * 2 - k) * s.hueShiftPerSector);
     this.audio.setLayers(i >= 2 ? 2 : i >= 1 ? 1 : 0);
   }
 

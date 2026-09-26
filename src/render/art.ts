@@ -246,13 +246,16 @@ export function bigMoonSprite(r: number): HTMLCanvasElement {
     px(3, my, 1, 1, eye);
     // Striped nightcap on the top-right with a pom-pom
     const capCol = ['#3aa0ff', '#f4f4ff'];
-    for (let i = 0; i < 12; i++) {
-      const w = 12 - i;
-      g.fillStyle = capCol[Math.floor(i / 2) % 2];
-      g.fillRect(cx + Math.round(rr * 0.15) + i, cy - rr - 3 + Math.floor(i * 0.6), w, 2);
+    const capX = cx - Math.round(rr * 0.05);
+    const capY = cy - rr - 4;
+    for (let i = 0; i < 18; i++) {
+      g.fillStyle = capCol[Math.floor(i / 3) % 2];
+      g.fillRect(capX + i, capY + Math.floor(i * 0.45), Math.max(1, 20 - i), 2 + (i < 3 ? 2 : 0));
     }
     g.fillStyle = '#ffe14d';
-    g.fillRect(cx + Math.round(rr * 0.15) + 12, cy - rr + 3, 3, 3);
+    g.fillRect(capX + 18, capY + 7, 4, 4);
+    g.fillStyle = '#fff3b0';
+    g.fillRect(capX + 18, capY + 7, 2, 2);
     return c;
   });
 }

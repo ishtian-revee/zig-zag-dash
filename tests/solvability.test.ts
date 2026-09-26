@@ -26,7 +26,7 @@ describe('chunk library', () => {
           expect(y, `${c.id} ${e.kind}`).toBeGreaterThanOrEqual(0);
           expect(y, `${c.id} ${e.kind}`).toBeLessThanOrEqual(c.h);
         }
-        if (e.kind !== 'rocket') {
+        if (e.kind !== 'rocket' && e.kind !== 'laser') {
           expect(e.x, `${c.id} ${e.kind}`).toBeGreaterThanOrEqual(0);
           expect(e.x, `${c.id} ${e.kind}`).toBeLessThanOrEqual(W);
         }

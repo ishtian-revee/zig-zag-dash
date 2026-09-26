@@ -221,7 +221,7 @@ export class World {
 
   /** Debug: skip to just below the next sector line. */
   jumpToNextSector(): void {
-    const next = Math.max(0, this.sector + 1);
+    const next = Math.max(0, sectorAt(this.distance + 41) + 1);
     this.player.y = this.startY - sectorStart(next) + 40;
     this.ents = [];
     this.chunks = [];
