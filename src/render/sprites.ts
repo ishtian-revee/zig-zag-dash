@@ -256,7 +256,7 @@ export function charSprite(id: string): HTMLCanvasElement {
 export function charSilhouette(id: string): HTMLCanvasElement {
   let c = charSilCache.get(id);
   if (!c) {
-    c = silhouette(charSprite(id), '#2a2350');
+    c = silhouette(charSprite(id), '#4a4082');
     charSilCache.set(id, c);
   }
   return c;

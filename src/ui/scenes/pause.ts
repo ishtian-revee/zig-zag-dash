@@ -3,6 +3,7 @@ import { drawText } from '../../render/font';
 import type { App, Scene } from '../app';
 import { drawHud } from '../hud';
 import { panel, type Button } from '../widgets';
+import type { PlayScene } from './play';
 
 const W = CONFIG.view.width;
 const H = CONFIG.view.height;
@@ -46,6 +47,7 @@ export class PauseScene implements Scene {
         label: 'QUIT TO MENU',
         style: 'outline',
         onPress: () => {
+          (app.scenes.play as PlayScene).record(true);
           app.audio.duck(false);
           app.go('menu');
         },

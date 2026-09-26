@@ -47,17 +47,21 @@ export class PlayScene implements Scene {
   }
 
   private finish(): void {
+    this.record(false);
+    this.app.go('gameover');
+  }
+
+  /** Save the current run's results (also used when quitting from the pause menu). */
+  record(quit: boolean): void {
     const app = this.app;
     const w = app.run.world;
-    this.lastResult = applyRun(app.save, {
-      score: w.score,
-      coins: w.coins,
-      gems: w.gems,
-      sector: w.sector,
-      playTime: app.run.playTime,
-    });
+    this.lastResult = applyRun(
+      app.save,
+      { score: w.score, coins: w.coins, gems: w.gems, sector: w.sector, playTime: app.run.playTime },
+      quit,
+    );
     app.persist();
-    app.go('gameover');
+    if (quit) for (const c of this.lastResult.unlocked) app.toast(`NEW CHARACTER: ${c.name}!`, P.gold);
   }
 
   pointerDown(): void {

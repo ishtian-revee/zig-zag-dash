@@ -18,8 +18,11 @@ export interface RunResult extends RunSummary {
   unlocked: CharacterDef[];
 }
 
-/** Fold a finished run into the save. Pure apart from mutating `save`. */
-export function applyRun(save: SaveData, run: RunSummary): RunResult {
+/**
+ * Fold a finished run into the save. Pure apart from mutating `save`.
+ * `quit` = the player left from the pause menu: coins and records still count, but not as a death.
+ */
+export function applyRun(save: SaveData, run: RunSummary, quit = false): RunResult {
   const prevBest = save.best;
   const newBest = run.score > prevBest;
   const newBestSector = run.sector > save.bestSector;
@@ -28,7 +31,7 @@ export function applyRun(save: SaveData, run: RunSummary): RunResult {
   if (newBestSector) save.bestSector = run.sector;
   const s = save.stats;
   s.runs += 1;
-  s.deaths += 1;
+  if (!quit) s.deaths += 1;
   s.totalCoins += run.coins;
   s.totalGems += run.gems;
   s.totalScore += run.score;

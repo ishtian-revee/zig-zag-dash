@@ -7,6 +7,9 @@ import { MenuScene } from './ui/scenes/menu';
 import { PauseScene } from './ui/scenes/pause';
 import { PlayScene } from './ui/scenes/play';
 import { ReadyScene } from './ui/scenes/ready';
+import { SettingsScene } from './ui/scenes/settings';
+import { StatsScene } from './ui/scenes/stats';
+import { TutorialScene } from './ui/scenes/tutorial';
 
 const W = CONFIG.view.width;
 const H = CONFIG.view.height;
@@ -57,6 +60,9 @@ app.register('ready', new ReadyScene(app));
 app.register('play', new PlayScene(app));
 app.register('pause', new PauseScene(app));
 app.register('gameover', new GameOverScene(app));
+app.register('tutorial', new TutorialScene(app));
+app.register('settings', new SettingsScene(app));
+app.register('stats', new StatsScene(app));
 app.go('menu', true);
 
 attachInput(canvas, {

@@ -2,6 +2,7 @@ import { AudioEngine } from '../audio/audio';
 import { CONFIG } from '../config';
 import { loadSave, writeSave, type SaveData } from '../core/storage';
 import { Background } from '../render/background';
+import { Particles } from '../render/particles';
 import { drawText, textWidth } from '../render/font';
 import { Run } from './run';
 import { drawButton, hit, roundRect, type Button } from './widgets';
@@ -34,6 +35,8 @@ export class App {
   readonly save: SaveData;
   readonly audio = new AudioEngine();
   readonly bg = new Background();
+  /** Screen-space particles for UI (unlock bursts, menu moons). */
+  readonly uiParticles = new Particles();
   time = 0;
   run: Run;
   scenes = {} as Record<SceneName, Scene>;
@@ -58,6 +61,7 @@ export class App {
     this.audio.setMusic(this.save.settings.music);
     this.audio.setSfx(this.save.settings.sfx);
     this.run = new Run(this);
+    this.applyEffects();
   }
 
   register(name: SceneName, s: Scene): void {
@@ -97,6 +101,33 @@ export class App {
     this.current = name;
     this.focus = -1;
     this.scenes[name].enter?.(from);
+  }
+
+  /** Apply the Reduce effects setting to particle systems. */
+  applyEffects(): void {
+    const d = this.save.settings.reduceEffects ? CONFIG.fx.reduceParticleFactor : 1;
+    this.run.particles.density = d;
+    this.uiParticles.density = d;
+  }
+
+  /** Share a result: Web Share API when available, otherwise copy to the clipboard. */
+  async share(score: number, sectorLabel: string): Promise<void> {
+    const text = `I scored ${score} and reached ${sectorLabel} in Zig Zag Dash! ${CONFIG.ui.shareUrl}`;
+    try {
+      if (typeof navigator.share === 'function') {
+        await navigator.share({ title: 'Zig Zag Dash', text });
+        return;
+      }
+    } catch (e) {
+      if ((e as DOMException)?.name === 'AbortError') return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      this.toast('COPIED!', CONFIG.palette.cyan);
+      this.announce('Result copied to the clipboard');
+    } catch {
+      this.toast("COULDN'T SHARE", CONFIG.palette.readyRed);
+    }
   }
 
   newRun(): void {
@@ -204,6 +235,7 @@ export class App {
     } else if (this.fadeIn > 0) this.fadeIn = Math.max(0, this.fadeIn - dt);
     this.debug?.tick(dt);
     this.scene?.update(dt);
+    this.uiParticles.update(dt);
     this.toasts = this.toasts.filter((t) => (t.t -= dt) > 0);
   }
 
@@ -221,8 +253,9 @@ export class App {
       const press = pt !== undefined && this.time - pt < 0.12 ? 1 : 0;
       drawButton(ctx, b, press, b === focused, this.time);
     }
+    this.uiParticles.draw(ctx, 0);
     // Toasts
-    let ty = 60;
+    let ty = 204;
     for (const t of this.toasts) {
       const a = Math.min(1, t.t * 4);
       const w = textWidth(t.text) + 12;
@@ -230,7 +263,7 @@ export class App {
       roundRect(ctx, CONFIG.view.width / 2 - w / 2, ty, w, 13, '#0b0820', 2);
       drawText(ctx, t.text, CONFIG.view.width / 2, ty + 3, { color: t.color, align: 'center' });
       ctx.globalAlpha = 1;
-      ty += 16;
+      ty -= 16;
     }
     this.debug?.draw(ctx);
     // Fade

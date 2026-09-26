@@ -268,3 +268,20 @@ Ads, in-app purchases, rewarded videos, gifts, accounts, online leaderboards, da
 ## 13. Originality guardrails
 
 Do **not** reuse the Swoopy Space name, logo, character names/designs ("Comet", etc.), text or art. Take mechanics and vibe only; all art, names, text, UI layout details and audio are our own.
+
+---
+
+## Deviations
+
+Decisions that turned out not to work as written (or needed an interpretation), with the closest alternative chosen.
+
+1. **HUD: pause button and sector name are both "top-centre".** They can't share the bar at 180 px wide, so the pause button sits in the centre of the top bar and the sector name sits directly below the bar, also centred.
+2. **Scaling: "whole-number scale on desktop", "fractional on small screens".** Rule used: fractional (still pixelated) when the fractional fit is below 2× (`view.smallScreenScale`), or on touch screens when the whole-number scale would fill less than 85% (`view.minIntegerFill`). Otherwise the whole-number scale is used. On a 900 px-tall desktop window that means 2× with a wide blurred fill.
+3. **Sector length "20 s of flight, converted to distance".** Distance = 20 s × sector speed × `sectors.verticalFactor` (cos 60° = 0.5, the vertical share of speed while holding a diagonal). An autopilot soak measured 0.49 in practice for a player who holds diagonals; players who tap a lot move up faster and see sectors sooner (about 12 s at worst).
+4. **Where ALPHA starts.** The run starts a short distance (`sectors.firstLineDistance` = 110 px) below the ALPHA line, so the first line crossing happens about 3 s in and names the sector, as in the reference. "Best sector" is −1 (shown as "-") if you die before it.
+5. **Background hue shift per sector.** A straight +18° per sector drifted into brown/red by ZETA and stopped reading as "deep indigo". The shift now steps 12° per sector and bounces back and forth within 0–48° (`sectors.hueShiftPerSector`, `sectors.hueShiftMax`).
+6. **Rare chunks.** With tier weighting, "rare" landmark chunks (big face moon, shield nests) almost never appeared in later sectors. Instead, each chunk slot has a `gen.rareChance` (12%) of being drawn from the rare pool (respecting `minSector`).
+7. **Solvability test scope.** "Proves at least one path gets through" is tested from 10 standard entry states (x ∈ {20, 55, 90, 125, 160} × both headings). The path must exit the chunk top with x in [20, 160], so consecutive chunks chain. Each test runs at both the chunk's first-sector speed and the capped speed, and at 5 clock phases for chunks with moving hazards. Taps are decided every 4 frames (~67 ms). Planets, moons and asteroids get a margin equal to the position jitter, so every jittered variant stays solvable.
+8. **Quit to Menu from Pause.** The plan doesn't say what happens to an abandoned run. Its coins and records are banked, and it counts as a run but not as a death.
+9. **Big face moon design.** An original sleepy face (closed eyes, blush, small wavy smile) with a striped nightcap. It shares no features with the reference's open-mouthed moon.
+10. **Debug overlay extras.** Besides G/N/C, `A` toggles a dev-only autopilot used for soak-testing long runs. `SOAK=1 npx vitest run tests/soak.scratch.test.ts` runs the same bot headless.

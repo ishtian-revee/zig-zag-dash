@@ -277,7 +277,7 @@ export class AudioEngine {
     const bpm = this.track === 'menu' ? 84 : 126;
     const sixteenth = 60 / bpm / 4;
     while (this.nextTime < c.currentTime + 0.15) {
-      this.note(this.step, this.nextTime, sixteenth);
+      if (this.musicOn) this.note(this.step, this.nextTime, sixteenth);
       this.nextTime += sixteenth;
       this.step = (this.step + 1) % 64;
     }
