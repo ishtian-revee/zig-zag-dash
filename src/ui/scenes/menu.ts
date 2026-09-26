@@ -194,5 +194,7 @@ export class MenuScene implements Scene {
       drawText(ctx, `BEST ${app.save.best}${sec}`, W / 2, 116, { align: 'center', color: '#c9c3ee', shadow: '#0b0820' });
     }
     this.carousel.draw(ctx, app.time);
+    // Quiet credit line under the bottom buttons.
+    drawText(ctx, 'DEVELOPED BY ISHTIAN REVEE', W / 2, 311, { align: 'center', color: '#4a4280' });
   }
 }

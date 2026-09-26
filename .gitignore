@@ -5,3 +5,4 @@ dist/
 *.log
 .env
 .claude/
+*_GAME_ANALYSIS.md

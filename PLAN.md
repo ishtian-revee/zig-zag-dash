@@ -1,6 +1,6 @@
 # Zig Zag Dash — Build Plan
 
-A free, browser-based, one-tap vertical endless scroller with neon pixel art in space. It takes its vibe, mechanics and UX from *Swoopy Space* (see `SWOOPY_SPACE_GAME_ANALYSIS.md`), but the name, characters, logo and art are all **original**. It has **no ads, no monetisation, no accounts and no server.**
+A free, browser-based, one-tap vertical endless scroller with neon pixel art in space. The name, characters, logo and art are all **original**. It has **no ads, no monetisation, no accounts and no server.**
 
 This file is the source of truth for the build. Values marked *(tunable)* live in one config module so the feel can be adjusted.
 
@@ -267,7 +267,7 @@ Ads, in-app purchases, rewarded videos, gifts, accounts, online leaderboards, da
 
 ## 13. Originality guardrails
 
-Do **not** reuse the Swoopy Space name, logo, character names/designs ("Comet", etc.), text or art. Take mechanics and vibe only; all art, names, text, UI layout details and audio are our own.
+Do **not** copy any existing game's name, logo, character names or designs, text or art. All art, names, text, UI layout details and audio are our own.
 
 ---
 
@@ -278,12 +278,12 @@ Decisions that turned out not to work as written (or needed an interpretation), 
 1. **HUD: pause button and sector name are both "top-centre".** They can't share the bar at 180 px wide, so the pause button sits in the centre of the top bar and the sector name sits directly below the bar, also centred.
 2. **Scaling: "whole-number scale on desktop", "fractional on small screens".** Rule used: fractional (still pixelated) when the fractional fit is below 2× (`view.smallScreenScale`), or on touch screens when the whole-number scale would fill less than 85% (`view.minIntegerFill`). Otherwise the whole-number scale is used. On a 900 px-tall desktop window that means 2× with a wide blurred fill.
 3. **Sector length "20 s of flight, converted to distance".** Distance = 20 s × sector speed × `sectors.verticalFactor` (cos 60° = 0.5). Since the vertical speed is constant (see 11), every sector takes exactly 20 s, however often you tap.
-4. **Where ALPHA starts.** The run starts a short distance (`sectors.firstLineDistance` = 110 px) below the ALPHA line, so the first line crossing happens about 3 s in and names the sector, as in the reference. "Best sector" is −1 (shown as "-") if you die before it.
+4. **Where ALPHA starts.** The run starts a short distance (`sectors.firstLineDistance` = 110 px) below the ALPHA line, so the first line crossing happens a few seconds in and names the sector. "Best sector" is −1 (shown as "-") if you die before it.
 5. **Background hue shift per sector.** A straight +18° per sector drifted into brown/red by ZETA and stopped reading as "deep indigo". The shift now steps 12° per sector and bounces back and forth within 0–48° (`sectors.hueShiftPerSector`, `sectors.hueShiftMax`).
 6. **Rare chunks.** With tier weighting, "rare" landmark chunks (big face moon, shield nests) almost never appeared in later sectors. Instead, each chunk slot has a `gen.rareChance` (12%) of being drawn from the rare pool (respecting `minSector`).
 7. **Solvability test scope.** "Proves at least one path gets through" is tested from 10 standard entry states (x ∈ {20, 55, 90, 125, 160} × both headings). The path must exit the chunk top with x in [20, 160], so consecutive chunks chain. Each test runs at both the chunk's first-sector speed and the capped speed, and at 5 clock phases for chunks with moving hazards. Taps are decided every 4 frames (~67 ms). Planets, moons and asteroids get a margin equal to the position jitter, so every jittered variant stays solvable.
 8. **Quit to Menu from Pause.** The plan doesn't say what happens to an abandoned run. Its coins and records are banked, and it counts as a run but not as a death.
-9. **Big face moon design.** An original sleepy face (closed eyes, blush, small wavy smile) with a striped nightcap. It shares no features with the reference's open-mouthed moon.
+9. **Big face moon design.** An original sleepy face (closed eyes, blush, small wavy smile) with a striped nightcap.
 10. **Debug overlay extras.** Besides G/N/C, `A` toggles a dev-only autopilot used for soak-testing long runs. `SOAK=1 npx vitest run tests/soak.scratch.test.ts` runs the same bot headless.
 11. **Velocity formula and base speed (after playtest feedback).** With `velocity = speed · (sin h, −cos h)`, the camera scroll (the vertical component) doubled from 35 to 70 px/s every time the heading swept through straight-up during a turn, then dropped back. Each tap felt like a brief speed burst. The start also felt too slow. Now the vertical speed is constant at `speed · cos 60°`, only the horizontal component follows the heading (`speed · sin h`), and `movement.baseSpeed` is 100 (50 px/s scroll, 87 px/s across; capped at about 150 by THETA). The diagonal is unchanged; only the mid-turn surge is gone. To leave room to turn away from a wall at top speed, the solvability test's entry/exit window moved from x ∈ [20, 160] to [30, 150].
 12. **Turn rate (after playtest feedback).** At the faster base speed, 360°/s turns felt sluggish (a flip took 0.33 s and drifted about 8 px the old way before reversing). `movement.turnRate` is now 720°/s: a flip takes 1/6 s and drifts about 4 px. All chunks remain solvable.
