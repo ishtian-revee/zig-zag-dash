@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#140f2e" />
+    <meta name="description" content="Zig Zag Dash: a free one-tap neon space dash. Tap to switch direction, grab gems, dodge planets." />
+    <title>Zig Zag Dash</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+        background: #0b0820;
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      #fill {
+        position: fixed;
+        inset: -40px;
+        width: calc(100% + 80px);
+        height: calc(100% + 80px);
+        filter: blur(14px) brightness(0.5) saturate(1.2);
+        image-rendering: auto;
+      }
+      #game {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        outline: none;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="fill" aria-hidden="true"></canvas>
+    <canvas id="game" width="180" height="320" role="img" aria-label="Zig Zag Dash game. Press Space or tap to switch direction. Use Tab and Enter for menu buttons." tabindex="0"></canvas>
+    <div id="live" class="sr-only" aria-live="polite"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
