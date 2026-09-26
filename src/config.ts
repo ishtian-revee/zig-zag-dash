@@ -111,7 +111,7 @@ export const CONFIG = {
     fadeTime: 0.2,
     goTime: 0.7,
     toastTime: 1.6,
-    shareUrl: 'https://example.com/zig-zag-dash', // placeholder until deployment
+    shareUrl: 'https://ishtian-revee.github.io/zig-zag-dash/',
   },
 
   // --- Juice (§8) ---
