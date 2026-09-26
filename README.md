@@ -13,13 +13,10 @@ npm install
 npm run dev        # http://localhost:5173
 npm test           # unit tests: movement, collision, scoring, saves, generator, chunk solvability
 npm run build      # static build in dist/ (relative paths, deployable anywhere)
+npm run preview    # serve dist/
 ```
 
 Play online: https://ishtian-revee.github.io/zig-zag-dash/ (deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main`).
-
-```bash
-npm run preview    # serve dist/
-```
 
 ## Controls
 
