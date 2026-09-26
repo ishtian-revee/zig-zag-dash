@@ -30,7 +30,7 @@ describe('movement', () => {
     flip(p);
     stepPlayer(p, DT, 70);
     expect(p.heading).toBeCloseTo(MAX - CONFIG.movement.turnRate * DT, 6);
-    // 120° at 360°/s = 1/3 s = 20 frames
+    // 120° at the turn rate takes at most 20 frames
     for (let i = 0; i < 25; i++) stepPlayer(p, DT, 70);
     expect(p.heading).toBeCloseTo(-MAX, 9);
     const x = p.x;

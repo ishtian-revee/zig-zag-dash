@@ -27,7 +27,7 @@ export const CONFIG = {
   movement: {
     baseSpeed: 100, // px/s along the diagonal (vertical scroll = baseSpeed · cos 60° = 50 px/s)
     maxHeading: 60 * DEG, // target heading is ±this
-    turnRate: 360 * DEG, // rad/s
+    turnRate: 720 * DEG, // rad/s (a full ±60° flip takes 1/6 s)
     startHeadingSign: 1 as 1 | -1, // +1 = right
     cameraAnchor: 0.62, // player sits this far down the screen
     speedGrowthPerSector: 0.06,
